@@ -6,35 +6,32 @@ import ExpensesFilter from "../ExpensesFilter/ExpensesFilter";
 import "./Expenses.css";
 
 function Expenses(props) {
-  const [chosenYear, setChosenYear] = useState("2020");
+  const [chosenYear, setChosenYear] = useState("2022");
+  const [expenses, setExpenses] = useState(props.expenses);
+
   const YearChangeHandler = (chosenYear) => {
     setChosenYear(chosenYear);
-    console.log(chosenYear)
+
+    setExpenses(
+      expenses.filter((prevExpenses) => {
+        return prevExpenses.date.getFullYear() === chosenYear;
+      })
+    );
   };
 
   return (
     <Card className="expenses">
       <ExpensesFilter selected={chosenYear} onYearChange={YearChangeHandler} />
-      <ExpenseItem
-        title={props.expenses[0].title}
-        amount={props.expenses[0].amount}
-        date={props.expenses[0].date}
-      />
-      <ExpenseItem
-        title={props.expenses[1].title}
-        amount={props.expenses[1].amount}
-        date={props.expenses[1].date}
-      />
-      <ExpenseItem
-        title={props.expenses[2].title}
-        amount={props.expenses[2].amount}
-        date={props.expenses[2].date}
-      />
-      <ExpenseItem
-        title={props.expenses[3].title}
-        amount={props.expenses[3].amount}
-        date={props.expenses[3].date}
-      />
+      {expenses.map((expense) => {
+        return (
+          <ExpenseItem
+            key={expense.id}
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        );
+      })}
     </Card>
   );
 }
